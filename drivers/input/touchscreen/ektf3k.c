@@ -413,11 +413,12 @@ static int check_fw_version(const unsigned char*firmware, unsigned int size, int
 	 
 }
 
-/* Reenable forced firmware update through sysfs */
+
+/*
 static ssize_t update_firmware(struct device *dev, struct device_attribute *devattr,const char *buf, size_t count)
 {
 	 struct i2c_client *client = to_i2c_client(dev);
-	 //struct elan_ktf3k_ts_data *ts = i2c_get_clientdata(client);
+	 struct elan_ktf3k_ts_data *ts = i2c_get_clientdata(client);
 	 struct file *firmware_fp;
 	 char file_path[100];
         unsigned int pos = 0;
@@ -446,12 +447,10 @@ static ssize_t update_firmware(struct device *dev, struct device_attribute *deva
 	 }
 	 filp_close(firmware_fp, NULL);
 	 // check the firmware ID and version
-	 // force into firmware updating
-	 if(RECOVERY || 1 /* check_fw_version(firmware, pos, ts->fw_ver ) */ > 0){
+	 if(RECOVERY || check_fw_version(firmware, pos, ts->fw_ver) > 0){
 	     touch_debug(DEBUG_INFO, "Firmware update start!\n");	
 	     do{
-	     	// reenable firmware update through sysfs by uncommenting following line
-	         ret = firmware_update_header(client, firmware, page_number);//add by mars
+//	         ret = firmware_update_header(client, firmware, page_number);//add by mars
 	         touch_debug(DEBUG_INFO, "Firmware update finish ret=%d retry=%d !\n", ret, retry++);
 	     }while(ret != 0 && retry < 3);
 	     if(ret == 0 && RECOVERY) RECOVERY = 0;
@@ -460,26 +459,15 @@ static ssize_t update_firmware(struct device *dev, struct device_attribute *deva
 	     
 	 return count;
 }
-// Reenable forced firmware update through sysfs
-DEVICE_ATTR(update_fw,  S_IWUSR, NULL, update_firmware);
+*/
+//DEVICE_ATTR(update_fw,  S_IWUSR, NULL, update_firmware);
 
 
 static struct attribute *elan_attr[] = {
 	&dev_attr_elan_touchpanel_status.attr,
 	&dev_attr_vendor.attr,
 	&dev_attr_gpio.attr,
-
-// Renable forced firmware update through sysfs
-	&dev_attr_update_fw.attr,
-/* sweep2wake sysfs */
-	&dev_attr_sweep2wake.attr,
-	&dev_attr_sweep2sleep.attr,
-	&dev_attr_wake_gestures.attr,
-	&dev_attr_doubletap2wake.attr,
-	&dev_attr_shortsweep.attr,
-	&dev_attr_pwrkey_suspend.attr,
-	&dev_attr_lid_suspend.attr,
-	&dev_attr_orientation.attr,
+	//&dev_attr_update_fw.attr,
 	NULL
 };
 
@@ -1826,3 +1814,4 @@ module_exit(elan_ktf3k_ts_exit);
 
 MODULE_DESCRIPTION("ELAN KTF3K Touchscreen Driver");
 MODULE_LICENSE("GPL");
+
