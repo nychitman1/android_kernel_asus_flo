@@ -232,3 +232,4 @@ int msm_dcvs_scm_event(uint32_t core_id,
 	return ret;
 }
 EXPORT_SYMBOL(msm_dcvs_scm_event);
+
